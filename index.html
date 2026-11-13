@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#080808" />
+  <meta name="description"
+    content="JOE — Developer, problem-solver, and builder turning ideas into digital experiences." />
+  <link rel="icon" type="image/svg+xml" href="/milo-mark.svg" />
+  <title>JOE — developer, problem-solver & builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script type="module" src="/app.js"></script>
+</head>
+
+<body>
+  <!-- Site Preloader: 60 FPS Snake Stroke Animation -->
+  <div id="site-loader" class="site-loader" aria-label="JOE">
+    <div class="loader-inner">
+      <svg class="snake-text" viewBox="0 0 320 110" xmlns="http://www.w3.org/2000/svg">
+        <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle">JOE</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="world" id="world">
+    <div class="noise-field" aria-hidden="true"></div>
+
+    <!-- Effects Containers -->
+    <div id="camera-flash" class="camera-flash-overlay" aria-hidden="true"></div>
+    <div id="lego-container" class="lego-container" aria-hidden="true"></div>
+
+    <main class="stage" id="top">
+      <section class="story" aria-label="JOE's story">
+        <!-- Character lying on top border line of cards -->
+        <div class="deck-character-anchor" id="character-anchor">
+          <div class="draggable-sticker sticker-special" data-sticker="character" title="Hey! Click me">
+            <img src="./character.png" alt="Character sticker" draggable="false" />
+            <!-- Character Speech / Quote Bubble -->
+            <div class="character-quote-bubble" id="character-quote" hidden aria-live="polite">
+              <span class="quote-text" id="character-quote-text">“Thinking is apparently optional.”</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cat lying on top edge of cards -->
+        <div class="deck-cat-anchor" id="cat-anchor">
+          <div class="draggable-sticker sticker-special" data-sticker="cat" title="Meow! Click me"
+            style="z-index: 33; transform: translate(-22.6094px, -110.879px) scale(1.06);">
+            <img src="./cat.png" alt="Cat sleeping on cards" draggable="false" />
+          </div>
+        </div>
+
+        <div class="card-stack" aria-live="polite" aria-atomic="true">
+          <div class="stack-sheet stack-sheet-four" aria-hidden="true"></div>
+          <div class="stack-sheet stack-sheet-three" aria-hidden="true"></div>
+          <div class="stack-sheet stack-sheet-two" aria-hidden="true"></div>
+          <div class="stack-sheet stack-sheet-one" aria-hidden="true"></div>
+          <article class="story-card" id="story-card">
+            <div class="card-topline">
+              <span class="card-mark"><span class="card-mark-dot"></span> JOE</span>
+              <span class="card-chapter" id="card-chapter">01 — INTRODUCTION</span>
+            </div>
+            <div class="card-copy" id="card-copy"></div>
+            <div class="card-footline">
+              <span id="card-index-label">01 — INTRODUCTION</span>
+              <span class="card-arrow-mark" aria-hidden="true">↗</span>
+            </div>
+          </article>
+        </div>
+        <div class="deck-controls" aria-label="Story navigation">
+          <button class="arrow-button" id="previous-card" type="button" aria-label="Previous slide"
+            title="Previous slide">
+            <span aria-hidden="true">←</span>
+          </button>
+          <div class="deck-counter" aria-live="polite"><span id="slide-current">1</span><span
+              class="counter-slash">/</span><span>9</span></div>
+          <div class="deck-progress" id="deck-progress" aria-label="Story progress"></div>
+          <button class="arrow-button arrow-next" id="next-card" type="button" aria-label="Next slide"
+            title="Next slide">
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Interactive draggable stickers / images -->
+      <div class="stickers-container" id="stickers-container" aria-label="Interactive floating stickers">
+        <!-- Algerian Flag -->
+        <div class="draggable-sticker" data-sticker="flag" title="العلم الجزائري - انقر لعزف النشيد الوطني">
+          <img src="./algerianflag.png" alt="Algerian flag sticker" draggable="false" />
+        </div>
+
+        <!-- Airplane -->
+        <div class="draggable-sticker" data-sticker="airplane" title="طائرة - انقر للإقلاع وفتح لوحة وصول المطار (Flight Board)">
+          <img src="./airplane.png" alt="Airplane sticker" draggable="false" />
+        </div>
+
+        <!-- Perfumes -->
+        <div class="draggable-sticker" data-sticker="parfume1" title="عطر 1 - انقر للرش">
+          <img src="./parfume1.png" alt="Perfume 1 sticker" draggable="false" />
+        </div>
+        <div class="draggable-sticker" data-sticker="parfume2" title="عطر 2 - انقر للرش">
+          <img src="./parfume2.png" alt="Perfume 2 sticker" draggable="false" />
+        </div>
+
+        <!-- Call Me -->
+        <div class="draggable-sticker" data-sticker="call" title="Call Me">
+          <img src="./call-me.png" alt="Call me sticker" draggable="false" />
+          <div class="call-popover" id="call-popover" hidden>
+            <a href="tel:++++++++" class="call-link" id="call-link">
+              <span class="call-icon">📞</span>
+              <span class="call-text">Call me: <strong>+++++++</strong></span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Camera -->
+        <div class="draggable-sticker" data-sticker="camera" title="كاميرا - انقر لالتقاط صورة">
+          <img src="./camera.png" alt="Camera sticker" draggable="false" />
+          <div class="camera-preview-slot" id="camera-slot" hidden>
+            <div class="camera-preview-card">
+              <span class="camera-stamp">PHOTO READY</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CJ Glasses -->
+        <div class="draggable-sticker" data-sticker="glasses" title="CJ Glasses - Snoop Dogg & Thug Life">
+          <img src="./cj-glasses.png" alt="Glasses sticker" draggable="false" />
+        </div>
+
+        <!-- Cups (close to each other for toasting) -->
+        <div class="draggable-sticker cups-pair" data-sticker="cup1" id="sticker-cup1" title="كأس 1 - انقر للنخب">
+          <img src="./cup1.png" alt="Cup 1 sticker" draggable="false" />
+        </div>
+        <div class="draggable-sticker cups-pair" data-sticker="cup2" id="sticker-cup2" title="كأس 2 - انقر للنخب">
+          <img src="./cup2.png" alt="Cup 2 sticker" draggable="false" />
+        </div>
+
+        <!-- Headphones -->
+        <div class="draggable-sticker" data-sticker="headphones" title="سماعات - انقر لتغيير الموسيقى">
+          <img src="./headphones.png" alt="Headphones sticker" draggable="false" />
+          <div class="music-wave" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="music-track-toast" id="music-track-toast" hidden aria-live="polite">
+            <span class="track-toast-icon">🎵</span>
+            <div class="track-toast-info">
+              <span class="track-toast-title" id="music-toast-title">Californication</span>
+              <span class="track-toast-artist" id="music-toast-artist">Red Hot Chili Peppers</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lego -->
+        <div class="draggable-sticker" data-sticker="lego" title="Lego - انقر لإسقاط الليغو">
+          <img src="./lego.png" alt="Lego sticker" draggable="false" />
+        </div>
+
+        <!-- Like Hand -->
+        <div class="draggable-sticker" data-sticker="like" title="انقر للإعجاب!">
+          <img src="./like-hand.png" alt="Thumbs up sticker" draggable="false" />
+          <span class="like-badge" id="like-badge">0 Likes</span>
+        </div>
+
+        <!-- My Bike -->
+        <div class="draggable-sticker" data-sticker="bike" title="دراجتي - انقر للقيادة">
+          <img src="./my-bike.png" alt="Road bike sticker" draggable="false" />
+        </div>
+
+        <!-- My Shoes -->
+        <div class="draggable-sticker" data-sticker="shoes" title="حذائي - انقر للمشي في المكان">
+          <img src="./my-shoes.png" alt="Shoes sticker" draggable="false" />
+        </div>
+
+        <!-- PC -->
+        <div class="draggable-sticker" data-sticker="pc" title="كمبيوتر">
+          <img src="./pc.png" alt="PC sticker" draggable="false" />
+        </div>
+
+        <!-- Sony PSP -->
+        <div class="draggable-sticker" data-sticker="psp" title="Sony PSP - انقر لتشغيل نغمة الألعاب">
+          <img src="./psp.png" alt="Sony PSP sticker" draggable="false" />
+        </div>
+
+        <!-- Red Box -->
+        <div class="draggable-sticker" data-sticker="redbox" title="Red box - انقر للرنين">
+          <img src="./red-box.png" alt="Red box sticker" draggable="false" />
+        </div>
+
+        <!-- Car -->
+        <div class="draggable-sticker" data-sticker="car" title="سيارة">
+          <img src="./car.png" alt="Car sticker" draggable="false" />
+        </div>
+
+        <!-- Email -->
+        <div class="draggable-sticker" data-sticker="email" title="راسلني بالبريد">
+          <img src="./email-me.png" alt="Email sticker" draggable="false" />
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="draggable-sticker" data-sticker="whatsapp" title="تواصل عبر واتساب">
+          <img src="./whatsapp-me.png" alt="WhatsApp sticker" draggable="false" />
+        </div>
+
+        <!-- LinkedIn -->
+        <div class="draggable-sticker" data-sticker="linkedin" title="لينكد إن">
+          <img src="./linkedin.png" alt="LinkedIn sticker" draggable="false" />
+        </div>
+
+        <!-- Think -->
+        <div class="draggable-sticker" data-sticker="think" title="فكرة">
+          <img class="think-head-img" src="./think.png" alt="Thinking sticker" draggable="false" />
+          <img src="./bulb.png" class="think-bulb-img" alt="Idea Bulb" draggable="false" />
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Airport Arrivals Split-Flap Board (لوحة رحلات المطار لتسجيل الزوار) -->
+  <button id="airport-dock-btn" class="airport-dock-btn" type="button" aria-label="Open Airport Arrivals Board" title="لوحة رحلات وصول زوار الموقع">
+    <span class="airport-dock-icon">✈️</span>
+    <span class="airport-dock-radar" aria-hidden="true"></span>
+    <div class="airport-dock-info">
+      <span class="airport-dock-kicker">TERMINAL 01 · LIVE ARRIVALS</span>
+      <span class="airport-dock-city" id="dock-city-label">OSLO, NO — JUST LANDED</span>
+    </div>
+  </button>
+
+  <div id="airport-modal" class="airport-modal" hidden aria-modal="true" role="dialog" aria-label="Live Airport Arrivals Board">
+    <div class="airport-backdrop" id="airport-backdrop"></div>
+    <div class="airport-board">
+      <div class="airport-board-topbar">
+        <div class="airport-branding">
+          <span class="airport-symbol">✈️</span>
+          <div>
+            <h2 class="airport-title">JOE AIRPORT · LIVE PASSENGER ARRIVALS</h2>
+            <p class="airport-subtitle">SPLIT-FLAP VISITOR RADAR & REGIONAL LOGS</p>
+          </div>
+        </div>
+        <div class="airport-topbar-controls">
+          <div class="airport-clock" id="airport-clock">18:15:20 UTC</div>
+          <button class="airport-btn airport-sound-btn" id="airport-sound-btn" type="button" title="Toggle mechanical flap sound">
+            <span id="airport-sound-icon">🔊</span> FLAP AUDIO
+          </button>
+          <button class="airport-btn airport-close-btn" id="airport-close-btn" type="button" aria-label="Close Flight Board">✕</button>
+        </div>
+      </div>
+
+      <div class="airport-table-wrapper">
+        <div class="airport-table-header">
+          <span class="th th-time">TIME</span>
+          <span class="th th-flight">FLIGHT</span>
+          <span class="th th-visitor">VISITOR</span>
+          <span class="th th-origin">ORIGIN (CITY)</span>
+          <span class="th th-status">STATUS</span>
+          <span class="th th-gate">GATE</span>
+        </div>
+        <div class="airport-rows" id="airport-rows">
+          <!-- Split flap rows rendered dynamically via JavaScript -->
+        </div>
+      </div>
+
+      <div class="airport-board-bottombar">
+        <div class="airport-stats">
+          <span class="airport-stat-item">RADAR: <strong class="text-green">ONLINE 🟢</strong></span>
+          <span class="airport-stat-item">YOUR ORIGIN: <strong id="airport-my-origin" class="text-amber">DETECTING...</strong></span>
+          <span class="airport-stat-item">TOTAL PASSENGERS: <strong id="airport-passenger-count" class="text-white">1,284</strong></span>
+        </div>
+        <div class="airport-actions">
+          <button class="airport-btn airport-simulate-btn" id="airport-simulate-btn" type="button">
+            ⚡ SIMULATE FLIGHT ARRIVAL
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
